@@ -7,6 +7,7 @@ npm-debug.log
 /coverage
 /coverage-browser
 /env
+/dist
 node_modules
 /test/live-server/ModuleLoader.js
 /test/live-server/ModuleLoader.js.map
