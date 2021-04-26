@@ -16,7 +16,7 @@ fs.emptyDirSync('./.nyc_output');
 
 fs.ensureDirSync('./coverage');
 fs.emptyDirSync('./coverage');
-
+console.log(`!!!!! process.version: ${process.version}`);
 const data = {
    suitePrefix: 'node/ModuleLoader',
    isBrowser: false,

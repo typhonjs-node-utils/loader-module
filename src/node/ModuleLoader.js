@@ -15,13 +15,11 @@ export default class ModuleLoader
     *
     * @param {string|URL}  options.modulepath - A module name, file path, or URL.
     *
-    * @param {function}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
+    * @param {Function}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
     *
-    * @param {string}      [options.basepath] - An optional base file path to accurately resolve `package.json`. By
-    *                                           default the traversal algorithm stops at the first `package.json`
-    *                                           encountered.
+    * @param {string}      [options.basepath] - An optional base file path to stop traversal for `package.json`.
     *
-    * @returns {Promise<{ModuleLoaderObj}>}
+    * @returns {Promise<{ModuleLoaderObj}>} The module / instance and data about the loading process.
     */
    static async load({ modulepath, resolveModule = void 0, basepath = void 0 } = {})
    {
