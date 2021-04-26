@@ -1,0 +1,13 @@
+.idea
+.DS_Store
+npm-debug.log
+*-debug.log
+*-error.log
+/.nyc_output
+/coverage
+/coverage-browser
+/env
+node_modules
+/test/live-server/ModuleLoader.js
+/test/live-server/ModuleLoader.js.map
+/test/live-server/TestSuiteRunner.js

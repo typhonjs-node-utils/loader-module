@@ -1,0 +1,3 @@
+{
+  "description": "Node will stop at the first package.json; no type is set, so this ESM file will fail."
+}
