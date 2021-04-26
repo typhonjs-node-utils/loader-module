@@ -5,7 +5,7 @@ import url                 from 'url';
 import chai                from 'chai';
 import chaiAsPromised      from 'chai-as-promised';
 
-import * as Module         from '../../../src/node/ModuleLoader.js';
+import * as Module         from '../../../dist/node/ModuleLoader.js';
 
 import TestSuiteRunner     from '../runner/TestSuiteRunner.js';
 

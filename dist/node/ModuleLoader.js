@@ -371,6 +371,8 @@ function isPathModule(filepath, basepath)
    switch (extension)
    {
       case '.js':
+// console.log(`!!!!! getPackageType({ filepath, basepath }): ${getPackageType({ filepath, basepath })}`)
+// console.log(`!!!!! truthy result: ${getPackageType({ filepath, basepath }) === 'module'}`)
          return getPackageType({ filepath, basepath }) === 'module';
 
       case '.mjs':
