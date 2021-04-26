@@ -37,7 +37,7 @@ const data = {
          type: 'import-url'
       },
       {
-         path: 'file:///Volumes/Data/program/javascript/projects/TyphonJS/repos/typhonrt/typhonjs-node-utils/loader-module/test/fixture/node/esm/success.js',
+         path: url.pathToFileURL(path.resolve('./test/fixture/node/esm/success.js')).toString(),
          defaultInstance: '{"default":"SUCCESS","namedExport":"SUCCESS_NAMED"}',
          resolveInstance: 'SUCCESS_NAMED',
          isESM: true,
@@ -71,7 +71,7 @@ const data = {
          type: 'require-url'
       },
       {
-         path: 'file:///Volumes/Data/program/javascript/projects/TyphonJS/repos/typhonrt/typhonjs-node-utils/loader-module/test/fixture/node/cjs/success.cjs',
+         path: url.pathToFileURL(path.resolve('./test/fixture/node/cjs/success.cjs')).toString(),
          defaultInstance: '["SUCCESS"]',
          resolveInstance: 'SUCCESS_NAMED',
          isESM: false,
