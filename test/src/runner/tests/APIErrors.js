@@ -25,6 +25,11 @@ export default class ModuleLoader
              TypeError, `'resolveModule' is not a function`);
          });
 
+         it(`load - bad modulepath`, async () =>
+         {
+            await expect(ModuleLoader.load({ modulepath: './a-bad-path.js' })).to.be.rejectedWith(Error);
+         });
+
          if (!data.isBrowser)
          {
             it(`load - basepath not a string`, async () =>

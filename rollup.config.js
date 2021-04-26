@@ -14,7 +14,7 @@ const s_DIST_PATH_NODE = './dist/node';
 const s_SOURCEMAP = true;
 
 // Adds Terser to the output plugins.
-const s_MINIFY = typeof process.env.ROLLUP_MINIFY === 'string' ? process.env.ROLLUP_MINIFY === 'true' : false;
+const s_MINIFY = typeof process.env.ROLLUP_MINIFY === 'string' ? process.env.ROLLUP_MINIFY === 'true' : true;
 
 export default () =>
 {
