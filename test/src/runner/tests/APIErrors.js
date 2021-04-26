@@ -33,11 +33,15 @@ export default class ModuleLoader
                 TypeError, `'basepath' is not a string`);
             });
 
-            it(`load - no basepath and wrong package.json found; will try to load ESM as CJS`, async () =>
+            // In CI on Node 12.2.0 the `esm` module is used and it messes this test up, so it's skipped.
+            if (!data.isNode12_2_0)
             {
-               await expect(ModuleLoader.load({ modulepath: './test/fixture/node/esm/sub/success.js' })).to.be.rejectedWith(
-                SyntaxError, `Unexpected token 'export'`);
-            });
+               it(`load - no basepath and wrong package.json found; will try to load ESM as CJS`, async () =>
+               {
+                  await expect(ModuleLoader.load({ modulepath: './test/fixture/node/esm/sub/success.js' })).to.be.rejectedWith(
+                     SyntaxError, `Unexpected token 'export'`);
+               });
+            }
          }
       });
    }

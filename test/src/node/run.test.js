@@ -20,6 +20,7 @@ fs.emptyDirSync('./coverage');
 const data = {
    suitePrefix: 'node/ModuleLoader',
    isBrowser: false,
+   isNode12_2_0: process.version === 'v12.2.0',
 
    modules: [
       {
