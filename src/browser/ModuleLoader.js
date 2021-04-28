@@ -1,3 +1,10 @@
+/**
+ * URL matching RegExp
+ *
+ * @type {RegExp}
+ */
+const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
+
 export default class ModuleLoader
 {
    /**
@@ -28,7 +35,7 @@ export default class ModuleLoader
       const loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
 
       const type = `import-${modulepath instanceof URL ||
-      (typeof modulepath === 'string' && modulepath.startsWith('http')) ? 'url' : 'path'}`;
+      (typeof modulepath === 'string' && modulepath.match(s_URL_REGEX)) ? 'url' : 'path'}`;
 
       const instance = resolveModule !== void 0 ? resolveModule(module) : module;
 

@@ -6,6 +6,13 @@ import { getPackageType }  from '@typhonjs-utils/package-json';
 
 const requireMod = module.createRequire(import.meta.url);
 
+/**
+ * URL matching RegExp
+ *
+ * @type {RegExp}
+ */
+const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
+
 export default class ModuleLoader
 {
    /**
@@ -68,8 +75,6 @@ function isPathModule(filepath, basepath)
    switch (extension)
    {
       case '.js':
-// console.log(`!!!!! getPackageType({ filepath, basepath }): ${getPackageType({ filepath, basepath })}`)
-// console.log(`!!!!! truthy result: ${getPackageType({ filepath, basepath }) === 'module'}`)
          return getPackageType({ filepath, basepath }) === 'module';
 
       case '.mjs':
@@ -105,7 +110,7 @@ function resolvePath(modulepath, basepath)
    }
    catch (error)
    {
-      if (modulepath instanceof URL || modulepath.startsWith('file:'))
+      if (modulepath instanceof URL || modulepath.match(s_URL_REGEX))
       {
          filepath = url.fileURLToPath(modulepath);
          type = 'url';
