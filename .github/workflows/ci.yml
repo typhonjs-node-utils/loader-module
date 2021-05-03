@@ -33,6 +33,7 @@ jobs:
       - name: Install esm
         run: npm install esm
 
+      # `esm` has problems with loading a minified bundle so optionally set it to not minify the bundle.
       - name: Set ROLLUP_MINIFY environment variable to false so `esm` works with non-minified source.
         id: step_one
         run: |
