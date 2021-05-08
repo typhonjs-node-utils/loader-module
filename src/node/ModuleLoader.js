@@ -24,11 +24,9 @@ export default class ModuleLoader
     *
     * @param {Function}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
     *
-    * @param {string}      [options.basepath] - An optional base file path to stop traversal for `package.json`.
-    *
     * @returns {Promise<{ModuleLoaderObj}>} The module / instance and data about the loading process.
     */
-   static async load({ modulepath, resolveModule = void 0, basepath = void 0 } = {})
+   static async load({ modulepath, resolveModule = void 0 } = {})
    {
       if (!(modulepath instanceof URL) && typeof modulepath !== 'string')
       {
@@ -40,12 +38,7 @@ export default class ModuleLoader
          throw new TypeError(`'resolveModule' is not a function`);
       }
 
-      if (basepath !== void 0 && typeof basepath !== 'string')
-      {
-         throw new TypeError(`'basepath' is not a string`);
-      }
-
-      const { filepath, isESM, type, loadpath } = resolvePath(modulepath, basepath);
+      const { filepath, isESM, type, loadpath } = resolvePath(modulepath);
 
       const module = isESM ? await import(url.pathToFileURL(filepath)) : requireMod(filepath);
 
@@ -63,19 +56,16 @@ export default class ModuleLoader
  *
  * @param {string} filepath - File path to load.
  *
- * @param {string} [basepath] - An optional base file path to accurately resolve `package.json`. By default the
- *                              traversal algorithm stops at the first `package.json` encountered.
- *
  * @returns {boolean} If the filepath is an ES Module.
  */
-function isPathModule(filepath, basepath)
+function isPathModule(filepath)
 {
    const extension = path.extname(filepath).toLowerCase();
 
    switch (extension)
    {
       case '.js':
-         return getPackageType({ filepath, basepath }) === 'module';
+         return getPackageType({ filepath }) === 'module';
 
       case '.mjs':
          return true;
@@ -91,13 +81,10 @@ function isPathModule(filepath, basepath)
  *
  * @param {string|URL}  modulepath - A module name, file path, URL to load.
  *
- * @param {string}      [basepath] - An optional base file path to accurately resolve `package.json`. By default the
- *                                   traversal algorithm stops at the first `package.json` encountered.
- *
  * @returns {{filepath: string, isESM: boolean, type: string, loadpath: string}} An object including file path and
  *                                                                               whether the module is ESM.
  */
-function resolvePath(modulepath, basepath)
+function resolvePath(modulepath)
 {
    let filepath, isESM, type = 'module';
 
@@ -106,7 +93,7 @@ function resolvePath(modulepath, basepath)
    try
    {
       filepath = requireMod.resolve(modulepath);
-      isESM = isPathModule(filepath, basepath);
+      isESM = isPathModule(filepath);
    }
    catch (error)
    {
@@ -125,7 +112,7 @@ function resolvePath(modulepath, basepath)
          loadpath = filepath;
       }
 
-      isESM = isPathModule(filepath, basepath);
+      isESM = isPathModule(filepath);
    }
 
    type = `${isESM ? 'import' : 'require'}-${type}`;

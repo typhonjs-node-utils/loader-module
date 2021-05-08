@@ -11,7 +11,7 @@ export default class ModuleLoader
          {
             it(`load - ${module.path}`, async () =>
             {
-               let result = await ModuleLoader.load({ modulepath: module.path, basepath: module.basepath });
+               let result = await ModuleLoader.load({ modulepath: module.path });
 
                if (module.defaultInstance)
                {

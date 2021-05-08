@@ -22,6 +22,20 @@ const data = {
    isBrowser: false,
    isNode12_2_0: process.version === 'v12.2.0',
 
+   errors: [
+      {
+         path: './test/fixture/node/esm/errors/bad_reference.js',
+         error: ReferenceError,
+         message: 'bad_reference is not defined'
+      },
+
+      {
+         path: './test/fixture/node/cjs/errors/bad_reference.cjs',
+         error: ReferenceError,
+         message: 'bad_reference is not defined'
+      },
+   ],
+
    modules: [
       {
          path: './test/fixture/node/esm/success.js',

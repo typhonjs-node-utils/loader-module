@@ -32,19 +32,14 @@ export default class ModuleLoader
 
          if (!data.isBrowser)
          {
-            it(`load - basepath not a string`, async () =>
-            {
-               await expect(ModuleLoader.load({ modulepath: './a-module.js', basepath: false })).to.be.rejectedWith(
-                TypeError, `'basepath' is not a string`);
-            });
-
             // In CI on Node 12.2.0 the `esm` module is used and it messes this test up, so it's skipped.
             if (!data.isNode12_2_0)
             {
-               it(`load - no basepath and wrong package.json found; will try to load ESM as CJS`, async () =>
+               it(`load - package.json w/ no type - will try to load ESM as CJS`, async () =>
                {
-                  await expect(ModuleLoader.load({ modulepath: './test/fixture/node/esm/sub/success.js' })).to.be.rejectedWith(
-                     SyntaxError, `Unexpected token 'export'`);
+                  await expect(ModuleLoader.load({
+                     modulepath: './test/fixture/node/esm/sub/success.js'
+                  })).to.be.rejectedWith(SyntaxError, `Unexpected token 'export'`);
                });
             }
          }
