@@ -34,6 +34,14 @@
       suitePrefix: 'browser/ModuleLoader',
       isBrowser: true,
 
+      errors: [
+         {
+            path: './modules/esm/errors/bad_reference.js',
+            error: ReferenceError,
+            message: 'bad_reference is not defined'
+         },
+      ],
+
       modules: [
          {
             path: './modules/esm/success.js',
