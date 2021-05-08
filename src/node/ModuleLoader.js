@@ -16,7 +16,8 @@ const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
 export default class ModuleLoader
 {
    /**
-    * Loads an ES Module in the browser passing back an object containing info about the loading process.
+    * Loads an ES Module via import dynamic or CommonJS via require in Node passing back an object containing info
+    * about the loading process.
     *
     * @param {object}      options - Options object.
     *
