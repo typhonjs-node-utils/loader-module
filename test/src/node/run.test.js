@@ -9,6 +9,8 @@ import * as Module         from '../../../dist/node/ModuleLoader.js';
 
 import TestSuiteRunner     from '../runner/TestSuiteRunner.js';
 
+const { ModuleLoadError } = Module;
+
 chai.use(chaiAsPromised);
 
 fs.ensureDirSync('./.nyc_output');
@@ -24,11 +26,31 @@ const data = {
 
    errors: [
       {
+         path: './test/fixture/node/esm/errors/bad_path.js',
+         error: ModuleLoadError,
+         message: `[MODULE_NOT_FOUND] import() failed to load ${path.resolve('./test/fixture/node/esm/errors/bad_path.js')}`
+      },
+      {
+         path: './test/fixture/node/cjs/errors/bad_path.cjs',
+         error: ModuleLoadError,
+         message: `[MODULE_NOT_FOUND] require failed to load ${path.resolve('./test/fixture/node/cjs/errors/bad_path.cjs')}`
+      },
+      {
+         path: url.pathToFileURL(path.resolve('./test/fixture/node/esm/errors/bad_path.js')),
+         error: ModuleLoadError,
+         message: `[MODULE_NOT_FOUND] import() failed to load ${url.pathToFileURL(path.resolve('./test/fixture/node/esm/errors/bad_path.js')).toString()}`
+      },
+      {
+         path: url.pathToFileURL(path.resolve('./test/fixture/node/cjs/errors/bad_path.cjs')),
+         error: ModuleLoadError,
+         message: `[MODULE_NOT_FOUND] require failed to load ${url.pathToFileURL(path.resolve('./test/fixture/node/cjs/errors/bad_path.cjs')).toString()}`
+      },
+
+      {
          path: './test/fixture/node/esm/errors/bad_reference.js',
          error: ReferenceError,
          message: 'bad_reference is not defined'
       },
-
       {
          path: './test/fixture/node/cjs/errors/bad_reference.cjs',
          error: ReferenceError,

@@ -23,6 +23,8 @@
 
    chai.use(chaiAsPromised);
 
+   const { ModuleLoadError } = Module;
+
    const port = window.location.port;
 
    const hostname = 'localhost'; // When testing on a different box set this to the live server IP.
@@ -35,6 +37,12 @@
       isBrowser: true,
 
       errors: [
+         {
+            path: './modules/esm/errors/bad_path.js',
+            error: TypeError,
+            message: `Failed to fetch dynamically imported module: http://localhost:8080/modules/esm/errors/bad_path.js`
+         },
+
          {
             path: './modules/esm/errors/bad_reference.js',
             error: ReferenceError,

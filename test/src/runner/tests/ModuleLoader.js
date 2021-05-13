@@ -22,8 +22,7 @@ export default class ModuleLoader
 
                result = await ModuleLoader.load({
                   modulepath: module.path,
-                  resolveModule: data.resolveModule,
-                  basepath: module.basepath
+                  resolveModule: data.resolveModule
                });
 
                if (module.resolveInstance)
@@ -34,6 +33,19 @@ export default class ModuleLoader
                assert.strictEqual(result.type, module.type);
             });
          }
+      });
+
+      describe(`ModuleLoadError`, () =>
+      {
+         it('exported correctly', () =>
+         {
+            const { ModuleLoadError } = Module;
+
+            const error = new ModuleLoadError({ message: 'test', code: '1' });
+
+            assert.isTrue(error instanceof ModuleLoadError);
+            assert.isTrue(error instanceof Error);
+         });
       });
    }
 }

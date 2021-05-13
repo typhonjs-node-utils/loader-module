@@ -4,6 +4,8 @@ import url                 from 'url';
 
 import { getPackageType }  from '@typhonjs-utils/package-json';
 
+import ModuleLoadError     from '../ModuleLoadError.js';
+
 const requireMod = module.createRequire(import.meta.url);
 
 /**
@@ -27,7 +29,7 @@ export default class ModuleLoader
     *
     * @returns {Promise<{ModuleLoaderObj}>} The module / instance and data about the loading process.
     */
-   static async load({ modulepath, resolveModule = void 0 } = {})
+   static async load({ modulepath, resolveModule = void 0 })
    {
       if (!(modulepath instanceof URL) && typeof modulepath !== 'string')
       {
@@ -41,11 +43,28 @@ export default class ModuleLoader
 
       const { filepath, isESM, type, loadpath } = resolvePath(modulepath);
 
-      const module = isESM ? await import(url.pathToFileURL(filepath)) : requireMod(filepath);
+      try
+      {
+         const module = isESM ? await import(url.pathToFileURL(filepath)) : requireMod(filepath);
 
-      const instance = resolveModule !== void 0 ? resolveModule(module) : module;
+         const instance = resolveModule !== void 0 ? resolveModule(module) : module;
 
-      return { filepath, instance, loadpath, isESM, module, modulepath, type };
+         return { filepath, instance, loadpath, isESM, module, modulepath, type };
+      }
+      catch (error)
+      {
+         // The CJS and ESM loaders of Node have different error codes. Collect both of these as one error with clear
+         // stack trace from ModuleLoader.
+         if (error.code === 'MODULE_NOT_FOUND' || error.code === 'ERR_MODULE_NOT_FOUND')
+         {
+            throw new ModuleLoadError({
+               message: `${isESM ? 'import()' : 'require'} failed to load ${loadpath}`,
+               code: 'MODULE_NOT_FOUND'
+            });
+         }
+
+         throw error;
+      }
    }
 }
 

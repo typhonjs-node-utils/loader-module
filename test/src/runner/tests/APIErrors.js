@@ -10,7 +10,7 @@ export default class ModuleLoader
          it(`load - modulepath not string (no options)`, async () =>
          {
             await expect(ModuleLoader.load()).to.be.rejectedWith(TypeError,
-             `'modulepath' is not a string or URL`);
+             /^Cannot destructure property 'modulepath'/);
          });
 
          it(`load - modulepath not string or URL`, async () =>

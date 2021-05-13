@@ -1,3 +1,5 @@
+import ModuleLoadError from "../ModuleLoadError";
+
 /**
  * URL matching RegExp
  *
@@ -18,7 +20,7 @@ export default class ModuleLoader
     *
     * @returns {Promise<{ModuleLoaderObj}>} The module / instance and data about the loading process.
     */
-   static async load({ modulepath, resolveModule = void 0 } = {})
+   static async load({ modulepath, resolveModule = void 0 })
    {
       if (!(modulepath instanceof URL) && typeof modulepath !== 'string')
       {
@@ -30,15 +32,33 @@ export default class ModuleLoader
          throw new TypeError(`'resolveModule' is not a function`);
       }
 
-      const module = await import(modulepath);
-
       const loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
 
       const type = `import-${modulepath instanceof URL ||
       (typeof modulepath === 'string' && modulepath.match(s_URL_REGEX)) ? 'url' : 'path'}`;
 
-      const instance = resolveModule !== void 0 ? resolveModule(module) : module;
+      try
+      {
+         const module = await import(modulepath);
 
-      return { filepath: loadpath, instance, isESM: true, loadpath, module, modulepath, type };
+         const instance = resolveModule !== void 0 ? resolveModule(module) : module;
+
+         return { filepath: loadpath, instance, isESM: true, loadpath, module, modulepath, type };
+      }
+      catch (error)
+      {
+         // In case the browser version of ModuleLoader is used on Node... The CJS and ESM loaders of Node have
+         // different error codes. Collect both of these as one error with clear stack trace from ModuleLoader.
+         /* istanbul ignore next */
+         if (error.code === 'MODULE_NOT_FOUND' || error.code === 'ERR_MODULE_NOT_FOUND')
+         {
+            throw new ModuleLoadError({
+               message: `import() failed to load ${loadpath}`,
+               code: 'ERR_MODULE_NOT_FOUND'
+            });
+         }
+
+         throw error;
+      }
    }
 }

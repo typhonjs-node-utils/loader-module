@@ -12,9 +12,8 @@ export default class ModuleLoaderFailures
             it(`load - ${module.path}`, async () =>
             {
                await expect(ModuleLoader.load({
-                  modulepath: module.path,
-                  basepath: module.basepath }
-               )).to.be.rejectedWith(module.error, module.message);
+                  modulepath: module.path
+               })).to.eventually.be.rejectedWith(module.message).and.be.an.instanceOf(module.error);
             });
          }
       });
