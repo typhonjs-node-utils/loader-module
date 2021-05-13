@@ -5,6 +5,10 @@ import { terser }    from 'rollup-plugin-terser';        // Terser is used for m
 
 // Import config files for Terser; refer to respective documentation for more information.
 import terserConfig from './terser.config';
+import fs           from "fs";
+
+// Add local typedefs.js file to the end of the bundles as a footer.
+const footer = fs.readFileSync('./src/typedef.js', 'utf-8');
 
 // The deploy path for the distribution for browser & Node.
 const s_DIST_PATH_BROWSER = './dist/browser';
@@ -30,9 +34,10 @@ export default () =>
    // const relativeDistNodePath = path.relative(`${s_DIST_PATH_NODE}`, '.');
 
    return [{   // This bundle is for the Node distribution.
-         input: ['src/node/ModuleLoader.js'],
+         input: ['src/node/index.js'],
          output: [{
             file: `${s_DIST_PATH_NODE}${path.sep}ModuleLoader.js`,
+            footer,
             format: 'es',
             plugins: outputPlugins,
             preferConst: true,
@@ -46,9 +51,10 @@ export default () =>
 
       // This bundle is for the browser distribution.
       {
-         input: ['src/browser/ModuleLoader.js'],
+         input: ['src/browser/index.js'],
          output: [{
             file: `${s_DIST_PATH_BROWSER}${path.sep}ModuleLoader.js`,
+            footer,
             format: 'es',
             plugins: outputPlugins,
             preferConst: true,
