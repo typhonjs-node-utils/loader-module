@@ -9,8 +9,8 @@ export default class ModuleLoader
       {
          it(`load - modulepath not string (no options)`, async () =>
          {
-            await expect(ModuleLoader.load()).to.be.rejectedWith(TypeError,
-             /^Cannot destructure property 'modulepath'/);
+            // Can't test whole error message as it slightly differs on Node 12.2.0
+            await expect(ModuleLoader.load()).to.be.rejectedWith(TypeError, /^Cannot destructure property/);
          });
 
          it(`load - modulepath not string or URL`, async () =>
