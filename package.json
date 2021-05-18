@@ -11,7 +11,7 @@
     "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^11",
+    "@rollup/plugin-node-resolve": "^13",
     "@typhonjs-utils/build-test": "^0.1.0",
     "@typhonjs-utils/build-test-browser": "^0.0.7",
     "@typhonjs-utils/package-json": "^0.1.0",
