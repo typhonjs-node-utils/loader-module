@@ -3,9 +3,7 @@ export default {
       passes: 3
    },
 
-   mangle: {
-      toplevel: true
-   },
+   mangle: false,
 
    ecma: 2020,
 
