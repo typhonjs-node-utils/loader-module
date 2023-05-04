@@ -2,9 +2,9 @@ import fs                  from 'fs-extra';
 import { BrowserRunner }   from '@typhonjs-build-test/node-browser';
 
 // Empty / copy test fixtures to web server root.
-fs.ensureDirSync('./test/live-server/modules');
-fs.emptyDirSync('./test/live-server/modules');
-fs.copySync('./test/fixture/browser', './test/live-server');
+fs.ensureDirSync('./test/public/modules');
+fs.emptyDirSync('./test/public/modules');
+fs.copySync('./test/fixture/browser', './test/public');
 
 (async () =>
 {
