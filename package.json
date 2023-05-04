@@ -1,7 +1,7 @@
 {
   "name": "@typhonjs-utils/loader-module",
   "description": "Provides loading of ES Modules via dynamic import for Node / browser and CJS via require on Node.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
   "type": "module",
   "contributors": [
@@ -17,6 +17,7 @@
   "devDependencies": {
     "@typhonjs-build-test/node-browser": "^0.0.1",
     "@typhonjs-utils/package-json": "^0.6.0",
+    "import-meta-resolve": "^3.0.0",
     "rollup": "^3"
   },
   "engines": {
