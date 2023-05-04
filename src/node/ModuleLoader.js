@@ -1,22 +1,23 @@
-import module              from 'module';
-import path                from 'path';
-import url                 from 'url';
+import module              from 'node:module';
+import path                from 'node:path';
+import url                 from 'node:url';
 
 import { getPackageType }  from '@typhonjs-utils/package-json';
+import { resolve }         from 'import-meta-resolve';
 
 import { ModuleLoadError } from '../ModuleLoadError.js';
 
 const requireMod = module.createRequire(import.meta.url);
 
-/**
- * URL matching RegExp
- *
- * @type {RegExp}
- */
-const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
-
 export class ModuleLoader
 {
+   /**
+    * URL matching RegExp
+    *
+    * @type {RegExp}
+    */
+   static #URL_REGEX = /^(https?:\/\/|file:\/\/)/;
+
    /**
     * @template M, E
     *
@@ -95,6 +96,16 @@ export class ModuleLoader
    }
 
    /**
+    * @param {*}  value - Value to test.
+    *
+    * @returns {boolean} Is the value a URL.
+    */
+   static #isURL(value)
+   {
+      return value instanceof URL || value.match(ModuleLoader.#URL_REGEX);
+   }
+
+   /**
     * Resolves a module path first by `require.resolve` to allow Node to resolve an actual module. If this fails then
     * the `modulepath` is resolved as a file path.
     *
@@ -105,22 +116,29 @@ export class ModuleLoader
     */
    static #resolvePath(modulepath)
    {
-      let filepath, isESM, type = 'module';
+      let filepath, isESM;
+      let type = ModuleLoader.#isURL(modulepath) ? 'url' : 'module';
 
       let loadpath = modulepath;
 
       try
       {
-         filepath = requireMod.resolve(modulepath);
+         // require.resolve was having a few issues with packages that should have resolved.
+         // filepath = requireMod.resolve(modulepath);
+
+         // The `import-meta-resolve` package is more heavyweight, but does work more reliably.
+         filepath = url.fileURLToPath(resolve(loadpath, import.meta.url));
+
          isESM = ModuleLoader.#isPathModule(filepath);
       }
       catch (error)
       {
-         if (modulepath instanceof URL || modulepath.match(s_URL_REGEX))
+         if (ModuleLoader.#isURL(modulepath))
          {
             filepath = url.fileURLToPath(modulepath);
             type = 'url';
 
+            /* c8 ignore next 1 */
             loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
          }
          else
