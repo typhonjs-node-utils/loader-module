@@ -12,16 +12,9 @@
 <script src="lib/mocha.js"></script>
 
 <script type="module">
-   import chai              from './lib/chai.js';
-   import chaiAsPromised    from './lib/chai-as-promised.js';
-
    import * as Module       from './ModuleLoader.js';
 
    import TestSuiteRunner   from './TestSuiteRunner.js';
-
-   import mochaConsoleLog   from './lib/mochaConsoleLog.js';
-
-   chai.use(chaiAsPromised);
 
    const { ModuleLoadError } = Module;
 
@@ -77,16 +70,7 @@
       resolveModule: (module) => module.namedExport
    };
 
-   mocha.setup({
-      timeout: '16000',
-      ui: 'bdd'
-   });
-
-   mocha.checkLeaks();
-
-   TestSuiteRunner.run(Module, data, chai);
-
-   mochaConsoleLog(mocha.run());
+   TestSuiteRunner.run({ Module, data });
 </script>
 </body>
 </html>

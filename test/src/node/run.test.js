@@ -1,17 +1,12 @@
-import fs                  from 'fs-extra';
-import path                from 'path';
-import url                 from 'url';
+import fs               from 'fs-extra';
+import path             from 'path';
+import url              from 'url';
 
-import chai                from 'chai';
-import chaiAsPromised      from 'chai-as-promised';
+import * as Module      from '../../../dist/node/ModuleLoader.js';
 
-import * as Module         from '../../../dist/node/ModuleLoader.js';
-
-import TestSuiteRunner     from '../runner/TestSuiteRunner.js';
+import TestSuiteRunner  from '../runner/TestSuiteRunner.js';
 
 const { ModuleLoadError } = Module;
-
-chai.use(chaiAsPromised);
 
 fs.ensureDirSync('./.nyc_output');
 fs.emptyDirSync('./.nyc_output');
@@ -131,4 +126,4 @@ const data = {
    resolveModule: (module) => module.namedExport
 };
 
-TestSuiteRunner.run(Module, data, chai);
+TestSuiteRunner.run({ Module, data });

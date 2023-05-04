@@ -1,21 +1,27 @@
-export default class ModuleLoaderFailures
+/**
+ * @param {object}                        opts - Test options
+ *
+ * @param {import('../../../../types')}   opts.Module - Module to test
+ *
+ * @param {object}                        opts.data - Extra test data.
+ *
+ * @param {object}                        opts.chai - Chai
+ */
+export function run({ Module, data, chai })
 {
-   static run(Module, data, chai)
-   {
-      const { expect } = chai;
-      const ModuleLoader = Module.default;
+   const { expect } = chai;
+   const ModuleLoader = Module.default;
 
-      describe(`ModuleLoader Failures (${data.suitePrefix})`, () =>
+   describe(`ModuleLoader Failures (${data.suitePrefix})`, () =>
+   {
+      for (const module of data.errors)
       {
-         for (const module of data.errors)
+         it(`load - ${module.path}`, async () =>
          {
-            it(`load - ${module.path}`, async () =>
-            {
-               await expect(ModuleLoader.load({
-                  modulepath: module.path
-               })).to.eventually.be.rejectedWith(module.message).and.be.an.instanceOf(module.error);
-            });
-         }
-      });
-   }
+            await expect(ModuleLoader.load({
+               modulepath: module.path
+            })).to.eventually.be.rejectedWith(module.message).and.be.an.instanceOf(module.error);
+         });
+      }
+   });
 }
