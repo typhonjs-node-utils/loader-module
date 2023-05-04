@@ -80,13 +80,22 @@ const data = {
          type: 'import-module'
       },
       {
+         path: '@typhonjs-utils/file-util',
+         isESM: true,
+         type: 'import-module'
+      },
+      {
+         path: '@typhonjs-build-test/testsuite-runner',
+         isESM: true,
+         type: 'import-module'
+      },
+      {
          path: './test/fixture/node/esm/success.mjs',
          defaultInstance: '{"default":"SUCCESS","namedExport":"SUCCESS_NAMED"}',
          resolveInstance: 'SUCCESS_NAMED',
          isESM: true,
          type: 'import-path'
       },
-
       {
          path: './test/fixture/node/cjs/success.cjs',
          defaultInstance: '["SUCCESS"]',
