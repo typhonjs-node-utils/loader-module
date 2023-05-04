@@ -10,7 +10,7 @@
 export function run({ Module, data, chai })
 {
    const { assert } = chai;
-   const ModuleLoader = Module.default;
+   const { ModuleLoader } = Module;
 
    describe(`ModuleLoader (${data.suitePrefix})`, () =>
    {
