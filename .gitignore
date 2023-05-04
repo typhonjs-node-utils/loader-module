@@ -1,3 +1,4 @@
+.dts
 .idea
 .DS_Store
 npm-debug.log
@@ -9,7 +10,7 @@ npm-debug.log
 /env
 /dist
 node_modules
-/test/live-server/modules
-/test/live-server/ModuleLoader.js
-/test/live-server/ModuleLoader.js.map
-/test/live-server/TestSuiteRunner.js
+/test/public/modules
+/test/public/ModuleLoader.js
+/test/public/ModuleLoader.js.map
+/test/public/TestSuiteRunner.js
