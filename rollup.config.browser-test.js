@@ -1,5 +1,6 @@
 import path       from 'path';
 
+import resolve    from '@rollup/plugin-node-resolve';
 import istanbul   from 'rollup-plugin-istanbul';      // Adds Istanbul instrumentation.
 
 // The test browser distribution is bundled to `./test/live-server`.
@@ -17,7 +18,7 @@ export default () =>
          output: [{
             file: `${s_TEST_BROWSER_PATH}/ModuleLoader.js`,
             format: 'es',
-            preferConst: true,
+            generatedCode: { constBindings: true },
             sourcemap: s_SOURCEMAP,
             sourcemapPathTransform: (sourcePath) => sourcePath.replace(relativeTestBrowserPath, `.`)
          }],
@@ -32,8 +33,11 @@ export default () =>
          output: [{
             file: `${s_TEST_BROWSER_PATH}/TestSuiteRunner.js`,
             format: 'es',
-            preferConst: true
-         }]
+            generatedCode: { constBindings: true },
+         }],
+         plugins: [
+            resolve({ browser: true })
+         ]
       }
    ];
 };

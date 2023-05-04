@@ -1,14 +1,12 @@
-import path          from 'path';
+import path             from 'path';
 
-import resolve       from '@rollup/plugin-node-resolve'; // This resolves NPM modules from node_modules.
-import { terser }    from 'rollup-plugin-terser';        // Terser is used for minification / mangling
+import resolve          from '@rollup/plugin-node-resolve'; // This resolves NPM modules from node_modules.
+import { generateDTS }  from '@typhonjs-build-test/esm-d-ts';
 
-// Import config files for Terser; refer to respective documentation for more information.
-import terserConfig from './terser.config';
-import fs           from "fs";
-
-// Add local typedefs.js file to the end of the bundles as a footer.
-const footer = fs.readFileSync('./src/typedef.js', 'utf-8');
+await generateDTS({
+   input: './src/node/index.js',
+   output: './types/index.d.ts',
+});
 
 // The deploy path for the distribution for browser & Node.
 const s_DIST_PATH_BROWSER = './dist/browser';
@@ -17,32 +15,15 @@ const s_DIST_PATH_NODE = './dist/node';
 // Produce sourcemaps or not.
 const s_SOURCEMAP = true;
 
-// Adds Terser to the output plugins.
-const s_MINIFY = typeof process.env.ROLLUP_MINIFY === 'string' ? process.env.ROLLUP_MINIFY === 'true' : true;
-
 export default () =>
 {
-   const outputPlugins = [];
-   if (s_MINIFY)
-   {
-      outputPlugins.push(terser(terserConfig));
-   }
-
-   // Reverse relative path from the deploy path to local directory; used to replace source maps path, so that it
-   // shows up correctly in Chrome dev tools.
-   // const relativeDistBrowserPath = path.relative(`${s_DIST_PATH_BROWSER}`, '.');
-   // const relativeDistNodePath = path.relative(`${s_DIST_PATH_NODE}`, '.');
-
    return [{   // This bundle is for the Node distribution.
          input: ['src/node/index.js'],
          output: [{
             file: `${s_DIST_PATH_NODE}${path.sep}ModuleLoader.js`,
-            footer,
             format: 'es',
-            plugins: outputPlugins,
-            preferConst: true,
+            generatedCode: { constBindings: true },
             sourcemap: s_SOURCEMAP,
-            // sourcemapPathTransform: (sourcePath) => sourcePath.replace(relativeDistNodePath, `.`)
          }],
          plugins: [
             resolve()
@@ -54,12 +35,9 @@ export default () =>
          input: ['src/browser/index.js'],
          output: [{
             file: `${s_DIST_PATH_BROWSER}${path.sep}ModuleLoader.js`,
-            footer,
             format: 'es',
-            plugins: outputPlugins,
-            preferConst: true,
+            generatedCode: { constBindings: true },
             sourcemap: s_SOURCEMAP,
-            // sourcemapPathTransform: (sourcePath) => sourcePath.replace(relativeDistBrowserPath, `.`)
          }],
          plugins: [
             resolve({ browser: true })
