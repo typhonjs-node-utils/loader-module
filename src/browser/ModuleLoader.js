@@ -1,4 +1,4 @@
-import ModuleLoadError from "../ModuleLoadError";
+import { ModuleLoadError } from '../ModuleLoadError.js';
 
 /**
  * URL matching RegExp
@@ -7,18 +7,20 @@ import ModuleLoadError from "../ModuleLoadError";
  */
 const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
 
-export default class ModuleLoader
+export class ModuleLoader
 {
    /**
+    * @template M, E
+    *
     * Loads an ES Module in the browser passing back an object containing info about the loading process.
     *
     * @param {object}      options - Options object.
     *
     * @param {string|URL}  options.modulepath - A module name, file path, or URL.
     *
-    * @param {Function}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
+    * @param {(M) => E}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
     *
-    * @returns {Promise<{ModuleLoaderObj}>} The module / instance and data about the loading process.
+    * @returns {Promise<ModuleLoaderObj<M, E>>} The module / instance and data about the loading process.
     */
    static async load({ modulepath, resolveModule = void 0 })
    {
@@ -62,3 +64,32 @@ export default class ModuleLoader
       }
    }
 }
+
+/**
+ * @template M, E
+ *
+ * @typedef {object} ModuleLoaderObj The object passed back from `ModuleLoader.load`.
+ *
+ * @property {string}      filepath If available the file path on Node otherwise this will match `loadpath` in the
+ * browser.
+ *
+ * @property {E}           instance Either the module itself or any particular export the `resolveModule` function
+ * selects.
+ *
+ * @property {boolean}     isESM Indicates if the import was an ES Module.
+ *
+ * @property {string}      loadpath A string representation of the module path being loaded.
+ *
+ * @property {M}           module The direct module import.
+ *
+ * @property {string|URL}  modulepath The initial string or URL sent to ModuleLoader.
+ *
+ * @property {(
+ *    'import-module' |
+ *    'import-path' |
+ *    'import-url' |
+ *    'require-module' |
+ *    'require-path' |
+ *    'require-url'
+ * )} type The type and how the module was loaded.
+ */

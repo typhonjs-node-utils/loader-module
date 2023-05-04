@@ -1,7 +1,7 @@
 /**
  * Provides a custom error for Node to combine CJS and ESM module not found errors.
  */
-export default class ModuleLoadError extends Error
+export class ModuleLoadError extends Error
 {
    /**
     * @param {object} options - Options object.
