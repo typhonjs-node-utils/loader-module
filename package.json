@@ -1,7 +1,7 @@
 {
   "name": "@typhonjs-utils/loader-module",
   "description": "Provides loading of ES Modules via dynamic import for Node / browser and CJS via require on Node.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
   "type": "module",
   "contributors": [
@@ -25,7 +25,8 @@
   "files": [
     "/npm-shrinkwrap.json",
     "/dist",
-    "/src"
+    "/src",
+    "/types"
   ],
   "homepage": "https://github.com/typhonjs-node-utils/loader-module",
   "keywords": [
