@@ -43,7 +43,7 @@ export class ModuleLoader
          throw new TypeError(`'resolveModule' is not a function`);
       }
 
-      const { filepath, isESM, type, loadpath } = resolvePath(modulepath);
+      const { filepath, isESM, type, loadpath } = ModuleLoader.#resolvePath(modulepath);
 
       try
       {
@@ -68,78 +68,76 @@ export class ModuleLoader
          throw error;
       }
    }
-}
 
-// Module Private ----------------------------------------------------------------------------------------------------
-
-/**
- * For `.js` files uses `getPackageType` to determine if `type` is set to `module` in associated `package.json`. If
- * the `modulePath` provided ends in `.mjs` it is assumed to be ESM.
- *
- * @param {string} filepath - File path to load.
- *
- * @returns {boolean} If the filepath is an ES Module.
- */
-function isPathModule(filepath)
-{
-   const extension = path.extname(filepath).toLowerCase();
-
-   switch (extension)
+   /**
+    * For `.js` files uses `getPackageType` to determine if `type` is set to `module` in associated `package.json`. If
+    * the `modulePath` provided ends in `.mjs` it is assumed to be ESM.
+    *
+    * @param {string} filepath - File path to load.
+    *
+    * @returns {boolean} If the filepath is an ES Module.
+    */
+   static #isPathModule(filepath)
    {
-      case '.js':
-         return getPackageType({ filepath }) === 'module';
+      const extension = path.extname(filepath).toLowerCase();
 
-      case '.mjs':
-         return true;
-
-      default:
-         return false;
-   }
-}
-
-/**
- * Resolves a module path first by `require.resolve` to allow Node to resolve an actual module. If this fails then
- * the `modulepath` is resolved as a file path.
- *
- * @param {string|URL}  modulepath - A module name, file path, URL to load.
- *
- * @returns {{filepath: string, isESM: boolean, type: string, loadpath: string}} An object including file path and
- *                                                                               whether the module is ESM.
- */
-function resolvePath(modulepath)
-{
-   let filepath, isESM, type = 'module';
-
-   let loadpath = modulepath;
-
-   try
-   {
-      filepath = requireMod.resolve(modulepath);
-      isESM = isPathModule(filepath);
-   }
-   catch (error)
-   {
-      if (modulepath instanceof URL || modulepath.match(s_URL_REGEX))
+      switch (extension)
       {
-         filepath = url.fileURLToPath(modulepath);
-         type = 'url';
+         case '.js':
+            return getPackageType({ filepath }) === 'module';
 
-         loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
+         case '.mjs':
+            return true;
+
+         default:
+            return false;
       }
-      else
-      {
-         filepath = path.resolve(modulepath);
-         type = 'path';
-
-         loadpath = filepath;
-      }
-
-      isESM = isPathModule(filepath);
    }
 
-   type = `${isESM ? 'import' : 'require'}-${type}`;
+   /**
+    * Resolves a module path first by `require.resolve` to allow Node to resolve an actual module. If this fails then
+    * the `modulepath` is resolved as a file path.
+    *
+    * @param {string|URL}  modulepath - A module name, file path, URL to load.
+    *
+    * @returns {{filepath: string, isESM: boolean, type: string, loadpath: string}} An object including file path and
+    *                                                                               whether the module is ESM.
+    */
+   static #resolvePath(modulepath)
+   {
+      let filepath, isESM, type = 'module';
 
-   return { filepath, isESM, type, loadpath };
+      let loadpath = modulepath;
+
+      try
+      {
+         filepath = requireMod.resolve(modulepath);
+         isESM = ModuleLoader.#isPathModule(filepath);
+      }
+      catch (error)
+      {
+         if (modulepath instanceof URL || modulepath.match(s_URL_REGEX))
+         {
+            filepath = url.fileURLToPath(modulepath);
+            type = 'url';
+
+            loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
+         }
+         else
+         {
+            filepath = path.resolve(modulepath);
+            type = 'path';
+
+            loadpath = filepath;
+         }
+
+         isESM = ModuleLoader.#isPathModule(filepath);
+      }
+
+      type = `${isESM ? 'import' : 'require'}-${type}`;
+
+      return { filepath, isESM, type, loadpath };
+   }
 }
 
 /**
