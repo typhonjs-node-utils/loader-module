@@ -20,7 +20,7 @@
     "rollup": "^3"
   },
   "engines": {
-    "node": ">=12.2"
+    "node": ">=14.18"
   },
   "files": [
     "/npm-shrinkwrap.json",
