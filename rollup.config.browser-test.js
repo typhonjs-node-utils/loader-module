@@ -3,8 +3,8 @@ import path       from 'path';
 import resolve    from '@rollup/plugin-node-resolve';
 import istanbul   from 'rollup-plugin-istanbul';      // Adds Istanbul instrumentation.
 
-// The test browser distribution is bundled to `./test/live-server`.
-const s_TEST_BROWSER_PATH = './test/live-server';
+// The test browser distribution is bundled to `./test/public`.
+const s_TEST_BROWSER_PATH = './test/public';
 
 // Produce sourcemaps or not.
 const s_SOURCEMAP = true;
