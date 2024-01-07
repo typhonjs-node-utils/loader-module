@@ -1,3 +1,4 @@
+import fs                  from 'node:fs';
 import module              from 'node:module';
 import path                from 'node:path';
 import url                 from 'node:url';
@@ -9,6 +10,11 @@ import { ModuleLoadError } from '../ModuleLoadError.js';
 
 const requireMod = module.createRequire(import.meta.url);
 
+/**
+ * Provides universal loading of ES Modules / CommonJS on Node and ES Modules in the browser.
+ *
+ * {@link ModuleLoaderObj} is returned with the loaded module along with metadata that describes the loading mechanism.
+ */
 export class ModuleLoader
 {
    /**
@@ -123,11 +129,14 @@ export class ModuleLoader
 
       try
       {
-         // require.resolve was having a few issues with packages that should have resolved.
-         // filepath = requireMod.resolve(modulepath);
-
          // The `import-meta-resolve` package is more heavyweight, but does work more reliably.
          filepath = url.fileURLToPath(resolve(loadpath, import.meta.url));
+
+         // `import-meta-resolve` no longer throws an error for when the filepath does not exist. To support relative
+         // filepath loading do check if the returned file path exists and if not throw locally.
+         const stat = fs.statSync(filepath);
+         /* c8 ignore next 1 */
+         if (!stat.isFile()) { throw new Error(); }
 
          isESM = ModuleLoader.#isPathModule(filepath);
       }
