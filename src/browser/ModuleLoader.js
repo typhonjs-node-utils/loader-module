@@ -9,7 +9,7 @@ export class ModuleLoader
     *
     * @param {object}      options - Options object.
     *
-    * @param {string|URL}  options.modulepath - A module name, file path, or URL.
+    * @param {string|URL}  options.modulepath - A URL to load.
     *
     * @param {(M) => E}    [options.resolveModule] - An optional function which resolves the import to set `instance`.
     *
