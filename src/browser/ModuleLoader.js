@@ -1,14 +1,14 @@
 import { ModuleLoadError } from '../ModuleLoadError.js';
 
-/**
- * URL matching RegExp
- *
- * @type {RegExp}
- */
-const s_URL_REGEX = /^(https?:\/\/|file:\/\/)/;
-
 export class ModuleLoader
 {
+   /**
+    * URL matching RegExp
+    *
+    * @type {RegExp}
+    */
+   static #URL_REGEX = /^(https?:\/\/|file:\/\/)/;
+
    /**
     * @template M, E
     *
@@ -37,7 +37,7 @@ export class ModuleLoader
       const loadpath = modulepath instanceof URL ? modulepath.toString() : modulepath;
 
       const type = `import-${modulepath instanceof URL ||
-      (typeof modulepath === 'string' && modulepath.match(s_URL_REGEX)) ? 'url' : 'path'}`;
+      (typeof modulepath === 'string' && modulepath.match(ModuleLoader.#URL_REGEX)) ? 'url' : 'path'}`;
 
       try
       {
