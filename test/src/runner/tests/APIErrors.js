@@ -10,7 +10,7 @@
 export function run({ Module, data, chai })
 {
    const { expect } = chai;
-   const { ModuleLoader } = Module;
+   const { ModuleLoader, ModuleLoadError } = Module;
 
    describe(`API Errors (${data.suitePrefix})`, () =>
    {
@@ -43,7 +43,7 @@ export function run({ Module, data, chai })
          {
             await expect(ModuleLoader.load({
                modulepath: './test/fixture/node/esm/sub/success.js'
-            })).to.be.rejectedWith(SyntaxError, `Unexpected token 'export'`);
+            })).to.be.rejectedWith(ModuleLoadError, `[MODULE_NOT_FOUND] require failed to load ./test/fixture/node/esm/sub/success.js`);
          });
       }
    });
