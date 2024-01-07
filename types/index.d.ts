@@ -1,3 +1,8 @@
+/**
+ * Provides universal loading of ES Modules / CommonJS on Node and ES Modules in the browser.
+ *
+ * {@link ModuleLoaderObj} is returned with the loaded module along with metadata that describes the loading mechanism.
+ */
 declare class ModuleLoader {
     /**
      * @template M, E
@@ -72,4 +77,4 @@ declare class ModuleLoadError extends Error {
     code: string;
 }
 
-export { ModuleLoadError, ModuleLoader, ModuleLoaderObj };
+export { ModuleLoadError, ModuleLoader, type ModuleLoaderObj };
