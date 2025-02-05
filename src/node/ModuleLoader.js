@@ -54,6 +54,7 @@ export class ModuleLoader
 
       try
       {
+         // Note: Node v22.12+ can load ESM with `require` except for source files with top level await.
          const module = isESM ? await import(url.pathToFileURL(filepath)) : requireMod(filepath);
 
          const instance = resolveModule !== void 0 ? resolveModule(module) : module;
