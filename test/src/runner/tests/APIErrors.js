@@ -39,12 +39,27 @@ export function run({ Module, data, chai })
 
       if (!data.isBrowser)
       {
-         it(`load - package.json w/ no type - will try to load ESM as CJS`, async () =>
+         if (!process.features?.require_module)
          {
-            await expect(ModuleLoader.load({
-               modulepath: './test/fixture/node/esm/sub/success.js'
-            })).to.be.rejectedWith(SyntaxError, `Unexpected token 'export'`);
-         });
+            // Prior to Node v22.12.0 this will fail. Above and `require` can load sync ESM.
+            it(`load - package.json w/ no type - will try to load ESM as CJS (Node v22.12 and below)`, async () =>
+            {
+               await expect(ModuleLoader.load({
+                  modulepath: './test/fixture/node/esm/sub/success.js'
+               })).to.be.rejectedWith(SyntaxError, `Unexpected token 'export'`);
+            });
+         }
+         else
+         {
+            // Node v22.12.0+ can `require` ESM code, but not with top level await / async modules.
+            it(`load - package.json w/ no type - will try to load async ESM w/ require and fail (Node v22.12+)`,
+             async () =>
+            {
+               await expect(ModuleLoader.load({
+                  modulepath: './test/fixture/node/esm/errors/sub/top-level-await-fail.js'
+               })).to.be.rejectedWith(Error, `require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.`);
+            });
+         }
       }
    });
 }
