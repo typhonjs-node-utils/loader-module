@@ -51,7 +51,7 @@
   "apidocs": "https://typhonjs-node-utils.github.io/loader-module/",
   "scripts": {
     "bundle": "rollup --config",
-    "docs": "typedoc-pkg --api-link esm",
+    "docs": "typedoc-pkg --api-link es",
     "eslint": "eslint .",
     "posttest-browser": "nyc report --exclude-after-remap=true --reporter=lcov --reporter=text-summary --report-dir=coverage-browser",
     "pretest-browser": "rollup --config rollup.config.browser-test.js",
